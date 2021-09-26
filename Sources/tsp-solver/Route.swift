@@ -9,7 +9,7 @@ struct Route:Hashable{
             var newWaypoints=waypointIndices
             newWaypoints.remove(at: Int.random(in: 0..<(waypointIndices.count)))
             return Route(waypointIndices: newWaypoints)
-        }else if (waypointIndices.count==1 || mutationFloat<0.4) && waypointIndices.count<numTasks{
+        }else if (waypointIndices.count==1 || mutationFloat<0.7) && waypointIndices.count<numTasks{
             // add random element
             var newWaypoints=waypointIndices
             // get task which is not yet added
@@ -34,12 +34,12 @@ struct Route:Hashable{
         }
     }
     static func produceOffspring(parent1:Route, parent2:Route, numTasks:Int)->Route{
-        let splitPoint=Int.random(in: 0..<(parent1.waypointIndices.count))
+        let splitPoint=parent1.waypointIndices.count>0 ? Int.random(in: 0..<(parent1.waypointIndices.count)):0
         var newWaypoints=[Int](repeating:0,count:splitPoint)
         for i in 0..<splitPoint{
             newWaypoints[i]=parent1.waypointIndices[i]
         }
-        let secondSlitPoint=Int.random(in: 0..<(parent2.waypointIndices.count))
+        let secondSlitPoint=parent2.waypointIndices.count>0 ? Int.random(in: 0..<(parent2.waypointIndices.count)):0
         for i in 0..<secondSlitPoint{
             if !parent1.waypointIndices.contains(parent2.waypointIndices[i]){
                 newWaypoints.append(parent2.waypointIndices[i])

@@ -6,9 +6,13 @@ class UtilityTimeEvaluator:FitnessEvaluator{
     static let maxFlightTimeSeconds:Float=10*60
     func evaluate(r:Route)->Float{
         if cache[r]==nil{
+            if r.waypointIndices.count==0{
+                cache[r]=0
+                return 0
+            }
             var e:Float=self.valueList[r.waypointIndices[0]]
             var flightTime:Float=0
-            for i in 1...(r.waypointIndices.count){
+            for i in 1 ..< (r.waypointIndices.count){
                 flightTime+=self.timeMatrix[r.waypointIndices[i-1]][r.waypointIndices[i]]
                 e+=self.valueList[r.waypointIndices[i]]
             }
