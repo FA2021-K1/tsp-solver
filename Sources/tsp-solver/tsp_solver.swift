@@ -35,7 +35,7 @@ class GeneticTSP_Solver: TSP_Solver{
     static func selectParent(population: [Route], evaluator:FitnessEvaluator) -> Route{
         var thresholds:[Float]=[0]
         for r in population{
-            thresholds.append(exp(evaluator.evaluate(r: r))+thresholds.last!)
+            thresholds.append(log(1+exp(evaluator.evaluate(r: r)))+thresholds.last!)
         }
         let rnd=Float.random(in: 0..<thresholds.last!)
         let index=thresholds.lastIndex(where: {val in val<rnd})!

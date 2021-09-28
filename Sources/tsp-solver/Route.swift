@@ -1,3 +1,4 @@
+
 struct Route:Hashable{
     let waypointIndices:[Int]
     func mutate(numTasks:Int)->Route{
@@ -34,16 +35,20 @@ struct Route:Hashable{
         }
     }
     static func produceOffspring(parent1:Route, parent2:Route, numTasks:Int)->Route{
-        let splitPoint=parent1.waypointIndices.count>0 ? Int.random(in: 0..<(parent1.waypointIndices.count)):0
-        var newWaypoints=[Int](repeating:0,count:splitPoint)
-        for i in 0..<splitPoint{
+        let minFinalLength=min(parent1.waypointIndices.count,parent2.waypointIndices.count)
+        let maxFinalLength=max(parent1.waypointIndices.count,parent2.waypointIndices.count)
+        let finalLength=Int.random(in: minFinalLength...maxFinalLength)
+        let filteredParent2Waypoints=parent2.waypointIndices.filter({point in !parent1.waypointIndices.contains(point)})
+        let minFirstSplitPoint=finalLength-filteredParent2Waypoints.count
+        let maxFirstSplitPoint=min(parent1.waypointIndices.count,finalLength)
+        let firstSplitPoint=Int.random(in: minFirstSplitPoint...maxFirstSplitPoint)
+        var newWaypoints=[Int](repeating:0,count:finalLength)
+        for i in 0..<firstSplitPoint{
             newWaypoints[i]=parent1.waypointIndices[i]
         }
-        let secondSlitPoint=parent2.waypointIndices.count>0 ? Int.random(in: 0..<(parent2.waypointIndices.count)):0
+        let secondSlitPoint=finalLength-firstSplitPoint
         for i in 0..<secondSlitPoint{
-            if !parent1.waypointIndices.contains(parent2.waypointIndices[i]){
-                newWaypoints.append(parent2.waypointIndices[i])
-            }
+            newWaypoints[firstSplitPoint+i] = filteredParent2Waypoints[i]
         }
         return Route(waypointIndices: newWaypoints)
     }
