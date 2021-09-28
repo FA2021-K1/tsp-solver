@@ -17,7 +17,7 @@ class UtilityTimeEvaluator:FitnessEvaluator{
                 e+=self.valueList[r.waypointIndices[i]]
             }
             // TODO: Add flight time to start and end
-            cache[r]=e-exp(flightTime-UtilityTimeEvaluator.maxFlightTimeSeconds)
+            cache[r]=e-exp(flightTime-UtilityTimeEvaluator.maxFlightTimeSeconds)-flightTime/200
         }
         return cache[r]!
     }

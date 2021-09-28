@@ -4,7 +4,7 @@ protocol TSP_Solver{
 }
 
 class GeneticTSP_Solver: TSP_Solver{
-    var numIterations: Int=1000
+    var numIterations: Int=100
     var numPopulation: Int=20
     func solve(num_cities: Int, evaluator: FitnessEvaluator) -> Route{
         var population: [Route]=[]
@@ -13,7 +13,8 @@ class GeneticTSP_Solver: TSP_Solver{
         }
         for _ in 0..<numIterations{
             population.sort(by: {evaluator.evaluate(r: $0) > evaluator.evaluate(r: $1)})
-            var nextGeneration: [Route]=[]
+            print("Best score in current round:",evaluator.evaluate(r: population[0]))
+            var nextGeneration: [Route]=[population[0]]
             for _ in 0..<numPopulation{
                         let parentOne = GeneticTSP_Solver.selectParent(population: population, evaluator: evaluator)
                         let parentTwo = GeneticTSP_Solver.selectParent(population: population, evaluator: evaluator)
@@ -37,8 +38,8 @@ class GeneticTSP_Solver: TSP_Solver{
         for r in population{
             thresholds.append(log(1+exp(evaluator.evaluate(r: r)))+thresholds.last!)
         }
-        let rnd=Float.random(in: 0..<thresholds.last!)
-        let index=thresholds.lastIndex(where: {val in val<rnd})!
-        return population[index]
+        let rnd=Float.random(in: 0...thresholds.last!)
+        let index = thresholds.lastIndex(where: {val in val<rnd})
+        return population[index==nil ? 0:index!]
     }
 }

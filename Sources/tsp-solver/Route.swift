@@ -5,7 +5,7 @@ struct Route:Hashable{
         let mutationFloat=Float.random(in: 0..<1)
         if waypointIndices.count==0{
             return Route(waypointIndices:[Int.random(in: 0..<numTasks)])
-        }else if  mutationFloat<0.2{
+        }else if  mutationFloat<0.4{
             // remove random element
             var newWaypoints=waypointIndices
             newWaypoints.remove(at: Int.random(in: 0..<(waypointIndices.count)))
@@ -39,7 +39,7 @@ struct Route:Hashable{
         let maxFinalLength=max(parent1.waypointIndices.count,parent2.waypointIndices.count)
         let finalLength=Int.random(in: minFinalLength...maxFinalLength)
         let filteredParent2Waypoints=parent2.waypointIndices.filter({point in !parent1.waypointIndices.contains(point)})
-        let minFirstSplitPoint=finalLength-filteredParent2Waypoints.count
+        let minFirstSplitPoint=max(0,finalLength-filteredParent2Waypoints.count)
         let maxFirstSplitPoint=min(parent1.waypointIndices.count,finalLength)
         let firstSplitPoint=Int.random(in: minFirstSplitPoint...maxFirstSplitPoint)
         var newWaypoints=[Int](repeating:0,count:finalLength)
